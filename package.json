@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node ./bin/www.js",
-    "devstart": "nodemon ./bin/www.js",
-    "serverstart": "DEBUG=linknote:* npm run devstart"
+    "dev": "nodemon ./bin/www.js",
+    "server": "DEBUG=linknote:* npm run dev"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
