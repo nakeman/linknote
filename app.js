@@ -1,11 +1,16 @@
 import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
-import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import session from 'express-session';
 import logger from 'morgan';
+import flash from "connect-flash";
+
+import {init_passport,init_session} from "./UserAuthentication.js"
 
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
+import notesRouter from './routes/notes.js';
 
 import { dirname, filename } from 'dirname-filename-esm';
 
@@ -19,13 +24,25 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.json());
+//app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: false }))
 
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUnintialzed: true,
+}))
+
+app.use(init_passport);
+app.use(init_session);
+
+app.use(flash());
+
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/notes', notesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
