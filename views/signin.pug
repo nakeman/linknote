@@ -1,4 +1,13 @@
 extends layout
 
 block content
-    p this a sign in page!
+    h1 sign in
+
+    form(action='/users/signin' method='post')
+        .form-group
+            label(for='email') Email
+            input.form-control(type='email', name='email' placeholder='Email' autofocus=true)
+        .form-group
+            label(for='password') Password
+            input.form-control(type='password', name='password')
+        button.btn.btn-primary(type='submit') Sign-in
