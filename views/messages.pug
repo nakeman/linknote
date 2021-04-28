@@ -1,0 +1,11 @@
+//- let haserror1 = success_msg != "";
+if success_msg != ""
+    .alert.alert-success.alert-dismissible.fade.show(role='alert')
+    | #{success_msg} 
+    button.close(type='button', data-dismiss='alert', aria-label='Close')
+        span(aria-hidden='true') ×
+else if error_msg != ""
+    .alert.alert-danger.alert-dismissible.fade.show(role='alert')
+    | #{error_msg} 
+    button.close(type='button', data-dismiss='alert', aria-label='Close')
+        span(aria-hidden='true') ×

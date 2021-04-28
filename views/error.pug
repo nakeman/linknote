@@ -1,0 +1,11 @@
+if error != ""
+    .alert.alert-danger.alert-dismissible.fade.show(role='alert')
+    | #{error} 
+    button.close(type='button', data-dismiss='alert', aria-label='Close')
+        span(aria-hidden='true') ×
+if errors
+  each e in errors
+      .alert.alert-danger.alert-dismissible.fade.show(role='alert')
+      | #{e.text}
+      button.close(type='button', data-dismiss='alert', aria-label='Close')
+          span(aria-hidden='true') ×
