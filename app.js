@@ -6,6 +6,7 @@ import session from 'express-session';
 import logger from 'morgan';
 import flash from "connect-flash";
 
+import './database.js'; // 何时何处创建：异步链接，似乎程序初始化时链接，和使用前链接无区别
 import {init_passport,init_session} from "./UserAuthentication.js"
 
 import indexRouter from './routes/index.js';
@@ -38,6 +39,16 @@ app.use(init_passport);
 app.use(init_session);
 
 app.use(flash());
+
+// Global Variables
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash("success_msg");
+  res.locals.error_msg = req.flash("error_msg");
+  res.locals.error = req.flash("error");
+  res.locals.user = req.user || null;
+  res.success_msg
+  next();
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);

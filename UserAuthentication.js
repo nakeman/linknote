@@ -1,22 +1,22 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 
-import {UsersSchema as User} from "./models/User.js"
+import User from "./models/User.js"
 
 passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
     },
-    (email, password, done) => {
+    async (email, password, done) => {
       // Match Email's User
-      const user = User.findOne({ email: email });
+      const user = await User.findOne({ email: email });
 
       if (!user) {
         return done(null, false, { message: "Not User found." });
       } else {
         // Match Password's User
-        const match = user.matchPassword(password);
+        const match = await user.matchPassword(password);
         if (match) {
           return done(null, user);
         } else {
