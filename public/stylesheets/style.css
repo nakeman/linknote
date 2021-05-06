@@ -1,8 +1,34 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+.window{
+  display:flex;
+  flex-direction:column;
+  height: 100vh;
+}
+.topbar{
+  background:hsl(162, 76%, 38%);
+  padding: 5px;
+}
+.linknote{
+  flex-grow: 1;
+}
+.linknote .row{
+  height: 100%;
+}
+#tags{
+  background:#5a5252;
+  height: 100%;
+}
+#notes {
+  border-right: 1px solid #d9d9d9;
+  height: 100%;
+  background: #37a0ca;
+}
+.clolist{
+  overflow-y: scroll;
 }

@@ -1,6 +1,22 @@
 extends layout
 
 block content
-    h1= title
-    p this a note list page!
-    a(href="/users/logout") logout
+    .window
+        .topbar
+            .row
+                #logo.col: a= title
+                #user.col: a(href="/users/logout") logout
+        .linknote
+            .row
+                #tags.col.s0.m2.l2
+                    h1 this tags list
+                #notes.col.s2.m4.l3
+                    h1 this notes list
+                    .clolist
+                        .collection
+                            a.collection-item note title01
+                            a.collection-item.active note title01
+                            a.collection-item note title01
+                            a.collection-item note title01
+                #note.col.s10.m6.l7
+                    h1 note here
