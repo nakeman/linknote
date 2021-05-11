@@ -9,6 +9,7 @@ a {
   display:flex;
   flex-direction:column;
   height: 100vh;
+  overflow: hidden;
 }
 .topbar{
   background:hsl(162, 76%, 38%);
@@ -20,15 +21,37 @@ a {
 .linknote .row{
   height: 100%;
 }
+li.ul-item > a{
+  display: block;
+  padding: 3px;
+  border-bottom: 1px solid #ffffff;
+  font-size: 12px;
+}
+li.ul-item > a:hover{
+  background:#ffffff;
+  color: #5a5252;
+}
+li.ul-item.active > a{
+  background:#ffffff;
+  color: #5a5252;
+}
+
+#notelist{
+  height: 100%;
+}
+
 #tags{
   background:#5a5252;
   height: 100%;
 }
-#notes {
+#notes-pan {
   border-right: 1px solid #d9d9d9;
   height: 100%;
   background: #37a0ca;
+  padding:0px;
+  overflow-y: scroll;
 }
 .clolist{
-  overflow-y: scroll;
+  overflow-y: auto;
+
 }

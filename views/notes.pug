@@ -2,21 +2,24 @@ extends layout
 
 block content
     .window
-        .topbar
+        header.topbar
             .row
                 #logo.col: a= title
                 #user.col: a(href="/users/logout") logout
-        .linknote
+        main.linknote
             .row
-                #tags.col.s0.m2.l2
+                aside#tags.col.s0.m2.l2
                     h1 this tags list
-                #notes.col.s2.m4.l3
-                    h1 this notes list
-                    .clolist
-                        .collection
-                            a.collection-item note title01
-                            a.collection-item.active note title01
-                            a.collection-item note title01
-                            a.collection-item note title01
-                #note.col.s10.m6.l7
+                section#notes-pan.col.s2.m4.l3
+                    h4 this notes list
+                          a.btn-floating.btn-large.waves-effect.waves-light.red
+                            i.material-icons add
+                    #notelist
+                        ul.ul-notes
+                            - var n = 0;
+                            while (n < 15)
+                                li.ul-item: a.waves-effect.waves-teal.btn-flat note title0 #{n++}
+                section#note.col.s10.m6.l7
                     h1 note here
+block script
+    script(src='/javascripts/notes.js')
