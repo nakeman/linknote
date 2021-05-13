@@ -41,10 +41,51 @@ function removeActive(){
 
 ///# note//////////////
 
+function note_init(){
+    // var editor = new Simditor({
+    //     textarea: $('#editor')
+    //     //optional options
+    //   });
+    var $preview, editor, mobileToolbar, toolbar;
+    Simditor.locale = 'en-US';
+    toolbar = ['title', 'bold', 'italic', 'underline', 'strikethrough', 'fontScale', 'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'hr', '|', 'indent', 'outdent', 'alignment'];
+    mobileToolbar = ["bold", "underline", "strikethrough", "color", "ul", "ol"];
+    // if (mobilecheck()) {
+    //     toolbar = mobileToolbar;
+    // }
+    editor = new Simditor({
+        textarea: $('#editor'),
+        toolbarFloat:true,
+        placeholder: '这里输入文字...',
+        toolbar: toolbar
+        
+    });
+    // $preview = $('#preview');
+    // if ($preview.length > 0) {
+    // return editor.on('valuechanged', function(e) {
+    //     return $preview.html(editor.getValue());
+    // });
+    // }
+
+    $('.chips-autocomplete').chips({
+    placeholder: 'Enter a tag',
+    secondaryPlaceholder: '+Tag',
+    autocompleteOptions: {
+        data: {
+        'Apple': null,
+        'Microsoft': null,
+        'Google': null
+        },
+        limit: Infinity,
+        minLength: 1
+    }
+    });
+}
 
 
 $(function(){ 
     notelist_init();
+    note_init();
 
     // const myInputElements = myForm.querySelectorAll('input')
 
