@@ -12,6 +12,7 @@ import {init_passport,init_session} from "./UserAuthentication.js"
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 import notesRouter from './routes/notes.js';
+import notesAPIRouter from './notes/router.js';
 
 import { dirname, filename } from 'dirname-filename-esm';
 
@@ -54,6 +55,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/notes', notesRouter);
+app.use('/api/notes',notesAPIRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
