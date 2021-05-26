@@ -1,8 +1,134 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
 }
+.window{
+  display:flex;
+  flex-direction:column;
+  height: 100vh;
+  overflow: hidden;
+}
+.topbar{
+  background:hsl(162, 76%, 38%);
+  padding: 5px;
+}
+.linknote{
+  flex-grow: 1;
+}
+.linknote .row{
+  height: 100%;
+}
+
+
+#notelist{
+  height: 100%;
+}
+
+#tags-pan{
+  background:#fff3e0;
+  border-right: 1px solid #d9d9d9;
+  height: 100vh;
+  padding:0px;
+  overflow-y: auto;
+}
+#notes-pan {
+  border-right: 1px solid #d9d9d9;
+  height: 100vh;
+  background: #fb8c00;
+  padding:0px;
+  overflow-y: auto;
+  color: white;
+}
+
+#note-pan{
+  border-right: 1px solid #d9d9d9;
+  height: 100vh;
+  padding:0px;
+  /* overflow-y: scroll; */
+  display:flex;
+  flex-direction: column;
+
+}
+section#simditor{
+  overflow-y:auto;
+  flex-grow: 1;
+
+}
+
+.clolist{
+  overflow-y: auto;
+
+}
+
+/**************************  */
+.note-item {
+  border-bottom: 1px solid #e4e5e6;
+  margin-bottom: 1px;
+  position: relative;
+  cursor:pointer;
+}
+
+.note-item.active {
+  background-color: #ff9800;
+  border-left: 4px solid #fff;
+}
+
+.note-item:hover{
+  background-color: #ff9800;
+}
+
+.note-item .desc {
+  display: inline-block;
+  /* width: 75%; */
+  padding: 10px 10px;
+  font-size: 12px
+}
+
+.note-item .desc .note_title {
+  font-size: 18px;
+  margin-bottom: 5px
+}
+
+.note-item .note_createdAt {
+  display: inline-block;
+  /* width: 15%; */
+  padding: 10px 10px 10px 0;
+  font-size: 12px;
+  text-align: right;
+  position: absolute;
+  top: 0;
+  right: 0
+}
+
+/******Form Input Style *************  */
+
+  /* label color */
+#searching.input-field label {
+    color: #fff;
+  }
+  /* label focus color */
+#searching.input-field input[type=text]:focus + label {
+    color: #fff;
+  }
+  /* label underline focus color */
+#searching.input-field input[type=text]:focus {
+    border-bottom: 1px solid #fff;
+    box-shadow: 0 1px 0 0 #fff;
+  }
+  /* valid color */
+#searching.input-field input[type=text].valid {
+    border-bottom: 1px solid #fff;
+    box-shadow: 0 1px 0 0 #fff;
+  }
+  /* invalid color */
+#searching.input-field input[type=text].invalid {
+    border-bottom: 1px solid #fff;
+    box-shadow: 0 1px 0 0 #fff;
+  }
+  /* icon prefix focus color */
+#searching.input-field .prefix.active {
+    color: #ffffff;
+  }
