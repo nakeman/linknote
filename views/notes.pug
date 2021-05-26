@@ -13,28 +13,44 @@ block content
                             #user.col: a(href="/users/logout") logout
                     h1 this tags list
                 section#notes-pan.col.s2.m4.l3
-                    form
-                        input.form-control(type='text', name='key' placeholder='searching...' autofocus=true)
-                        a.btn-floating.btn-large.waves-effect.waves-light.red
+                    header
+                        section
+                            .input-field
+                                i.material-icons.prefix search
+                                input#search.form-control(type='text', name='key' placeholder='searching...' autofocus=true)
+                        a#newnote.btn-floating.btn-large.waves-effect.waves-light.red(style='position: absolute;right: 15px;')
                             i.material-icons add
                     #notelist   
-                        ul.ul-notes
-                            - var n = 0;
-                            while (n < 45)
-                                li.ul-item: a.waves-effect.waves-teal.btn-flat note title0 #{n++}
+                        ul#notelist_ul.ul-notes
+                            //- each note in notes
+                            //-     li.ul-note(id=note.id): a.waves-effect.waves-teal.btn-flat #{ note.title}
+                            //-         .note_CreatedAt(style="float:right") #{note.createdAt}
                 section#note-pan.col.s10.m6.l7
                     header
                         .input-field
                             i.material-icons.prefix create
-                            input#topic(type='text' name='topic')
+                            input#topic(type='text' name='topic' style='font-size: xx-large;')
                             label(for='topic') Note Topic
                     section(style='display: flex;')
                         i(style='font-size:xx-large').material-icons.prefix label
                         div(style='margin:auto').chips.chips-autocomplete
                     section#simditor
                         textarea#editor(placeholder='Balabala' autofocus)
+                        a#savenote.btn-floating.btn-large.waves-effect.waves-light.write(style='position: absolute;top: 20px;right: 15px;')
+                            i.material-icons save
+    template#notelist_item_tp
+        .note-item
+            .desc
+                .note_title Lorem Ipsum
+                .note_desc Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit
+            .time
+                .note_createdAt Jun 1, 2012
+                div.day 1 day
 block script
     script(src='/javascripts/editor/module.js')
     script(src='/javascripts/editor/hotkeys.js')
     script(src='/javascripts/editor/simditor.js')
     script(src='/javascripts/notes.js')
+
+
+      

@@ -1,5 +1,6 @@
 import Note from './model.js';
 import xssFilters from 'xss-filters'
+import dayjs from 'dayjs';
 
 const NoteCtrl = {};
 /**
@@ -8,7 +9,8 @@ const NoteCtrl = {};
 NoteCtrl.load =function(req, res, next, id){
   Note.get(id)
     .then((note) => {
-      note.content = xssFilters.inHTMLData(note.content);
+      //TODO: simditor 似乎自动作了xss处理 
+      //note.content = xssFilters.inHTMLData(note.content);
       req.note = note; // eslint-disable-line no-param-reassign
       return next();
     })
@@ -37,6 +39,33 @@ NoteCtrl.list = function list(req, res, next) {
       .catch(e => next(e));
   }
 
+NoteCtrl.search_fulltext = function search(req, res){
+  let key = req.params.key;
+  //res.send(key);
+
+  Note.find({
+    $text: { $search: key },
+  })
+    .then(notes => console.log(notes.length))
+    .catch(e => console.error(e));
+}
+
+// TODO: where user == req.user.id
+NoteCtrl.search_regex = function search(req, res){
+  let key = req.params.key;
+  //res.send(key);
+
+  Note.find({
+    $or:[
+      {"content":{ $regex: key, $options: 'i' }},
+      {"title":{ $regex: key, $options: 'i' }}
+      ]
+    }
+)
+    .then(notes => res.json(notes))
+    .catch(e => console.error(e));
+}
+
 /**
  * Create new note
  * @property {string} req.body.notename - The notename of note.
@@ -44,10 +73,10 @@ NoteCtrl.list = function list(req, res, next) {
  * @returns {Note}
  */
 NoteCtrl.create = function create(req, res, next) {
-  //if (!req.user) res.send('not login!!');
+  if (!req.user) {return res.send('not login!!');}
   const note = new Note({
-    user: 23232,//req.user.id,
-    title: req.body.title,
+    user: req.user.id,
+    title: dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
     content: req.body.content
   });
 
@@ -70,8 +99,10 @@ NoteCtrl.update = function update(req, res, next) {
   note.content = req.body.content;
 
   note.save()
-    .then(savedNote => res.json(savedNote))
-    .catch(e => next(e));
+    .then(result => res.json({result:"success!"}))
+    .catch(err => res.json({result:error.message}));
+    // .then(savedNote => res.json(savedNote))
+    // .catch(e => next(e));
 
 }
 

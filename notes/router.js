@@ -1,4 +1,4 @@
-////notes C component | Router
+////notes REST API | Router
 ////////////////////////////////
 import express from 'express';
 //import ensuerLogins from 'connect-ensure-login';
@@ -33,7 +33,7 @@ router.route('/:id')
 /** Load note when API with id route parameter is hit */
 router.param('id', noteCtrl.load);
 
-//router.get('/s/:key',noteCtrl.searching);
+router.get('/s/:key',noteCtrl.search_regex);
 
 
 export default router;
