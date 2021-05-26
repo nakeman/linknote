@@ -97,10 +97,11 @@ NoteCtrl.update = function update(req, res, next) {
   const note = req.note;
   note.title = req.body.title;
   note.content = req.body.content;
+  note.createdAt = req.body.createdAt;
 
   note.save()
-    .then(result => res.json({result:"success!"}))
-    .catch(err => res.json({result:error.message}));
+    .then(result => res.json(result))
+    .catch(err => res.json({result:err.message}));
     // .then(savedNote => res.json(savedNote))
     // .catch(e => next(e));
 

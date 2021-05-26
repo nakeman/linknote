@@ -102,6 +102,9 @@ async function addNew(e){
     $notetitle.value = result.title;
     noteid = result._id;
 
+    //
+    buildSingleNOteByTemplate(result);
+
 
 }
 
@@ -129,17 +132,61 @@ async function getNotes(n){
     let response = await fetch('api/notes/');
     let result = await response.json();
     
-    buildTheNotelistByTemplate2(result);
+    buildTheNotelistByTemplate(result);
 }
 
 async function rebuildTheNotelist(){
     let response = await fetch('api/notes/');
     let result = await response.json();
 
-    buildTheNotelistByTemplate2(result)
+    buildTheNotelistByTemplate(result)
 
 }
 
+function buildSingleNOteByTemplate(note){
+    var $notelist_container = document.querySelector(".ul-notes");
+    var listfragment = document.createDocumentFragment();
+    let template = document.querySelector("#notelist_item_tp");
+    const item = template.content.cloneNode(true);
+    item.querySelector('.note-item').setAttribute('id',note._id);
+    item.querySelector('.note_title').innerHTML = note.title;
+    item.querySelector('.note_createdAt').innerHTML = note.time;
+
+    item.querySelector('.note_desc').innerHTML = note.desc;
+    item.querySelector('.day').innerHTML = note.day; 
+
+    listfragment.appendChild(item);
+    
+    //将新note插入列表的第一个位置
+    $notelist_container.insertBefore(listfragment,$notelist_container.firstChild);
+
+    removeActive();
+    $clickedEle = $notelist_container.firstChild;
+    $clickedEle.classList.add("active");
+}
+
+function updateSingleNOteByTemplate(note){
+    var $notelist_container = document.querySelector(".ul-notes");
+    var updatednote_fg = document.createDocumentFragment();
+    let template = document.querySelector("#notelist_item_tp");
+    const item = template.content.cloneNode(true);
+    // 1 下面替换后 id数字开头不能引用，加一个ID
+    item.querySelector('.note-item').setAttribute('id','ID'+ note._id);
+    item.querySelector('.note_title').innerHTML = note.title;
+    item.querySelector('.note_createdAt').innerHTML = note.time;
+
+    item.querySelector('.note_desc').innerHTML = note.desc;
+    item.querySelector('.day').innerHTML = note.day; 
+
+    updatednote_fg.appendChild(item);
+
+    $clickedEle.replaceWith(updatednote_fg);
+    $clickedEle = $notelist_container.querySelector("#ID"+note._id);
+    $clickedEle.classList.add("active");
+    // 2 引用处理完后改回来
+    $clickedEle.setAttribute('id',note._id);
+
+}
 
 function buildTheNotelistByTemplate(notejson){
     var $notelist_container = document.querySelector(".ul-notes");
@@ -218,7 +265,8 @@ async function saveNote(e){
     $notetitle = document.querySelector("#topic");
     let note = {
         title: $notetitle.value,
-        content: editor.getValue()
+        content: editor.getValue(),
+        createdAt: Date.now()
       };
       
       let response = await fetch('/api/notes/'+noteid, {
@@ -230,7 +278,8 @@ async function saveNote(e){
       });
       
       let result = await response.json();
-      alert(result.result);
+      updateSingleNOteByTemplate(result);
+      alert('ok');
 
 
 }
