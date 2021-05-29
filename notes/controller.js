@@ -28,9 +28,6 @@ NoteCtrl.get = function (req, res) {
 
 /**
  * Get note list.
- * @property {number} req.query.skip - Number of notes to be skipped.
- * @property {number} req.query.limit - Limit number of notes to be returned.
- * @returns {Note[]}
  */
 NoteCtrl.list = function list(req, res, next) {
     const { limit = 50, skip = 0 } = req.query;
@@ -68,9 +65,6 @@ NoteCtrl.search_regex = function search(req, res){
 
 /**
  * Create new note
- * @property {string} req.body.notename - The notename of note.
- * @property {string} req.body.mobileNumber - The mobileNumber of note.
- * @returns {Note}
  */
 NoteCtrl.create = function create(req, res, next) {
   if (!req.user) {return res.send('not login!!');}
@@ -89,21 +83,17 @@ NoteCtrl.create = function create(req, res, next) {
 
 /**
  * Update existing note
- * @property {string} req.body.notename - The notename of note.
- * @property {string} req.body.mobileNumber - The mobileNumber of note.
- * @returns {Note}
  */
 NoteCtrl.update = function update(req, res, next) {
   const note = req.note;
   note.title = req.body.title;
   note.content = req.body.content;
   note.createdAt = req.body.createdAt;
+  note.tags = req.body.tags;
 
   note.save()
     .then(result => res.json(result))
     .catch(err => res.json({result:err.message}));
-    // .then(savedNote => res.json(savedNote))
-    // .catch(e => next(e));
 
 }
 

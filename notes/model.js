@@ -35,7 +35,15 @@ const NoteSchema = new mongoose.Schema({
   },
   categroy:{ type:String, maxlength:50},
   tags:{ 
-    type:[{id:mongoose.Schema.ObjectId, name:String}]
+    type:[
+      {
+        id:{
+          type:mongoose.Schema.ObjectId,
+          ref:'tags'
+        },
+      
+      name:String}
+    ]
   },
   linkTo:{ 
     type:[{id:mongoose.Schema.ObjectId,title:String}]

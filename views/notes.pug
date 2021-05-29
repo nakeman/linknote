@@ -11,7 +11,8 @@ block content
                         .row
                             #logo.col: a= title
                             #user.col: a(href="/users/logout") logout
-                    h1 this tags list
+                    #taglist   
+                        ul#taglist_ul.ul-tags
                 section#notes-pan.col.s2.m4.l3
                     header
                         section
@@ -46,6 +47,12 @@ block content
             .time
                 .note_createdAt Jun 1, 2012
                 div.day 1 day
+    template#taglist_item_tp
+        .tag-item
+            .desc
+                .tag Lorem
+            .count
+                .notecount 25
 block script
     script(src='/javascripts/editor/module.js')
     script(src='/javascripts/editor/hotkeys.js')
