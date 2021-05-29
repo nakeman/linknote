@@ -14,44 +14,68 @@ function tagslist_init(){
 
     let taglist_v = document.querySelector("#taglist_ul");
 
-    let taglist_nl = taglist_v.querySelectorAll(".ul-tag");
-
     // item click
     taglist_v.addEventListener("click",e => {
         TagItemOnClick(e);
     });
 
-
-    // searching
-    // let $search_input = document.querySelector("#search");
-    // $search_input.addEventListener("keypress", e => {
-    //     if(e.keyCode == 13) {
-    //         search($search_input.value);
-    //     }
-    // });
-    // $search_input.addEventListener("keyup", e => {
-    //     //alert(e.keyCode);
-    //     if($search_input.value ==''){
-    //         rebuildTheNotelist();
-            
-    //     }        
-    // })
-    
-    // init
-
     getTags(100);    
 
 }
 
-function getTags(n){
-    
+async function getTags(n){
+    let response = await fetch('api/tags/');
+    let result = await response.json();
+    //alert(result.length);
+    buildTheTaglistByTemplate(result);
 
 }
+
+let $clickedTag;
 
 function TagItemOnClick(e){
+    // 0 清除样式
+    removeTagActive();
+    $clickedTag = e.target;
 
+    while(!$clickedTag.classList.contains("tag-item"))
+        $clickedTag = $clickedTag.parentNode;
+
+    //alert($clickedTag.id);
+    $clickedTag.classList.add("active");
+
+    // 2 
+    getNoteByTag($clickedTag.id);
 }
-///# notelist//////////////
+
+function removeTagActive(){
+    if($clickedTag)
+    $clickedTag.classList.remove("active");
+};
+
+function buildTheTaglistByTemplate(tagjson){
+    //console.log(tagjson.length);
+    var $taglist_container = document.querySelector(".ul-tags");
+    var listfragment = document.createDocumentFragment();
+    let template = document.querySelector("#taglist_item_tp");
+    //1 clear list first
+    while ($taglist_container.firstChild) $taglist_container.removeChild($taglist_container.firstChild);
+
+    //2 build the new list
+    for (var i = 0; i < tagjson.length; i++) {
+        const item = template.content.cloneNode(true);
+        item.querySelector('.tag-item').setAttribute('id',tagjson[i]._id);
+        item.querySelector('.tag').innerHTML = tagjson[i].name;
+
+        item.querySelector('.notecount').innerHTML = tagjson[i].notecount;
+
+
+        listfragment.appendChild(item);
+    }
+    $taglist_container.appendChild(listfragment);
+    
+}
+///# notelist//////////////========================================================================================
 
 let activenote; // note that active editing
 
@@ -130,10 +154,12 @@ async function addNew(e){
     
     activenote = await response.json();
 
-    editor.setValue(activenote.content);
-    let $notetitle = document.querySelector("#topic");
-    $notetitle.focus();
-    $notetitle.value = activenote.title;
+    syncNotewithUI();
+
+    // editor.setValue(activenote.content);
+    // let $notetitle = document.querySelector("#topic");
+    // $notetitle.focus();
+    // $notetitle.value = activenote.title;
 
     // add a note ui item on the top of notelist
     buildSingleNOteByTemplate(activenote);
@@ -145,6 +171,19 @@ async function addNew(e){
 // 1 title content的编辑修改
 // 2 tags 修改
 function syncNotewithUI(){
+    editor.setValue(activenote.content);
+
+    let $notetitle = document.querySelector("#topic");
+    $notetitle.value = activenote.title;
+
+    // tag chips
+    let chips = [];
+    activenote.tags.forEach(tag =>{
+        chips.push({tag:tag.name})
+    })
+    tagChip(chips,[]);
+
+    $notetitle.focus();
     
 }
 
@@ -159,19 +198,22 @@ async function search(key){
 async function getOneNote(id){
     let response = await fetch('api/notes/'+ id);
     activenote = await response.json();
-    editor.setValue(activenote.content);
+    
 
-    let $notetitle = document.querySelector("#topic");
-    $notetitle.value = activenote.title;
+    syncNotewithUI();
+    //editor.setValue(activenote.content);
 
-    // tag chips
-    let chips = [];
-    activenote.tags.forEach(tag =>{
-        chips.push({tag:tag.name})
-    })
-    tagChip(chips,[]);
+    // let $notetitle = document.querySelector("#topic");
+    // $notetitle.value = activenote.title;
 
-    $notetitle.focus();
+    // // tag chips
+    // let chips = [];
+    // activenote.tags.forEach(tag =>{
+    //     chips.push({tag:tag.name})
+    // })
+    // tagChip(chips,[]);
+
+    // $notetitle.focus();
 }
 
 // TODO supply userid 
@@ -295,20 +337,21 @@ function tagChip(tagsdata,autocompleteOptions){
             activenote.tags.push({id:newtag.id,name:newtag.name});
             //alert(activenote.tags.length);
     
-            $notetitle = document.querySelector("#topic");
-            let note = {
-                title: $notetitle.value,
-                content: editor.getValue(),
-                createdAt: Date.now(),
-                tags:activenote.tags
-              };
+            // $notetitle = document.querySelector("#topic");
+            // let note = {
+            //     title: $notetitle.value,
+            //     content: editor.getValue(),
+            //     createdAt: Date.now(),
+            //     tags:activenote.tags
+            //   };
+            activenote.createdAt = Date.now();
               
               let response = await fetch('/api/notes/'+activenote.id, {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json;charset=utf-8'
                 },
-                body: JSON.stringify(note)
+                body: JSON.stringify(activenote)
               });
               
               let result = await response.json();
@@ -333,21 +376,23 @@ function tagChip(tagsdata,autocompleteOptions){
             let newtags = activenote.tags.filter( tag => {
                 return tag.name != deleltetag;
             });
-            //console.log(newtags);
-            $notetitle = document.querySelector("#topic");
-            let note = {
-                title: $notetitle.value,
-                content: editor.getValue(),
-                createdAt: Date.now(),
-                tags:newtags
-              };
+
+            // $notetitle = document.querySelector("#topic");
+            // let note = {
+            //     title: $notetitle.value,
+            //     content: editor.getValue(),
+            //     createdAt: Date.now(),
+            //     tags:newtags
+            //   };
+            activenote.createdAt = Date.now();
+            activenote.tags = newtags;
               
               response = await fetch('/api/notes/'+activenote.id, {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json;charset=utf-8'
                 },
-                body: JSON.stringify(note)
+                body: JSON.stringify(activenote)
               });
               
               result = await response.json();
@@ -375,7 +420,7 @@ function note_init(){
         toolbar: toolbar
         
     });
-    
+
     editor.on('valuechanged', (e, src) => {
         activenote.content = editor.getValue();
     });
@@ -399,19 +444,19 @@ function note_init(){
 }
 
 async function saveNote(e){
-    $notetitle = document.querySelector("#topic");
-    let note = {
-        title: $notetitle.value,
-        content: editor.getValue(),
-        createdAt: Date.now()
-      };
+    // $notetitle = document.querySelector("#topic");
+    // let note = {
+    //     title: $notetitle.value,
+    //     content: editor.getValue(),
+    //     createdAt: Date.now()
+    //   };
       
       let response = await fetch('/api/notes/'+activenote.id, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json;charset=utf-8'
         },
-        body: JSON.stringify(note)
+        body: JSON.stringify(activenote)
       });
       
       let result = await response.json();

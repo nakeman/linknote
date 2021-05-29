@@ -11,7 +11,9 @@ block content
                         .row
                             #logo.col: a= title
                             #user.col: a(href="/users/logout") logout
-                    #taglist   
+                    #taglist
+                        .alltags
+                            i.material-icons.prefix(style="margin:25px") local_offer 全部
                         ul#taglist_ul.ul-tags
                 section#notes-pan.col.s2.m4.l3
                     header
@@ -33,7 +35,7 @@ block content
                             input#topic(type='text' name='topic' style='font-size: xx-large;')
                             label(for='topic') Note Topic
                     section(style='display: flex;')
-                        i(style='font-size:xx-large').material-icons.prefix label
+                        i(style='font-size:xx-large').material-icons.prefix local_offer
                         div(style='margin:auto').chips.chips-autocomplete
                     section#simditor
                         textarea#editor(placeholder='Balabala' autofocus)
@@ -49,6 +51,7 @@ block content
                 div.day 1 day
     template#taglist_item_tp
         .tag-item
+            i.material-icons.prefix local_offer
             .desc
                 .tag Lorem
             .count

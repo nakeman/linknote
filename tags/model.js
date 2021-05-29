@@ -23,7 +23,7 @@ const TagSchema = new mongoose.Schema({
   },
   notecount:{
     type: Number,
-    default: 0
+    default: 1
   },
   createdAt: {
     type: Date,
@@ -90,13 +90,14 @@ TagSchema.statics = {
    * @param {number} limit - Limit number of tags to be returned.
    * @returns {Promise<Tag[]>}
    */
-  list({ skip = 0, limit = 50 } = {}) {
-    return this.find()
+  list({ skip = 0, limit = 50, user = null } = {}) {
+    return this.find({user:user})
       .sort({ createdAt: -1 })
       .skip(+skip)
       .limit(+limit)
       .exec();
   }
+
 };
 
 /**

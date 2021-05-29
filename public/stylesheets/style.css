@@ -103,6 +103,60 @@ section#simditor{
   right: 0
 }
 
+/**************************  */
+.tag-item {
+  border-bottom: 1px solid #fff;
+  margin-bottom: 1px;
+  position: relative;
+  cursor:pointer;
+  color: #757575;
+}
+
+.tag-item.active {
+  background-color: #ff9800;
+  color: #fff;
+  border-left: 4px solid #757575;
+}
+
+.tag-item:hover{
+  background-color: #ff9800;
+  color: #fff;
+}
+
+.tag-item .desc {
+  display: inline-block;
+  /* width: 75%; */
+  padding: 10px 10px;
+  font-size: 20pt;
+  /* color:#757575; */
+}
+
+.tag-item .desc .tagname {
+  font-size: 18px;
+  margin-bottom: 5px
+}
+
+.tag-item .notecount {
+  display: inline-block;
+  /* width: 15%; */
+  padding: 10px 10px 10px 0;
+  font-size: 12px;
+  text-align: right;
+  position: absolute;
+  top: 0;
+  right: 0
+}
+
+.alltags { 
+  font-size:22pt;
+  cursor: pointer;
+}
+
+.alltags:hover{
+  background-color: #ff9800;
+  color: #fff;
+}
+
 /******Form Input Style *************  */
 
   /* label color */

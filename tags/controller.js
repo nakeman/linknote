@@ -44,8 +44,10 @@ TagCtrl.get = function (req, res) {
  * Get tag list.
  */
 TagCtrl.list = function list(req, res, next) {
-    const { limit = 50, skip = 0 } = req.query;
-    Tag.list({ limit, skip })
+    const { limit = 50, skip = 0,user = req.user.id } = req.query;
+    //optins.user = req.user.id;
+
+    Tag.list({limit, skip, user})
       .then(tags => res.json(tags))
       .catch(e => next(e));
   }
