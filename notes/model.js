@@ -35,7 +35,15 @@ const NoteSchema = new mongoose.Schema({
   },
   categroy:{ type:String, maxlength:50},
   tags:{ 
-    type:[{id:mongoose.Schema.ObjectId, name:String}]
+    type:[
+      {
+        id:{
+          type:mongoose.Schema.ObjectId,
+          ref:'tags'
+        },
+      
+      name:String}
+    ]
   },
   linkTo:{ 
     type:[{id:mongoose.Schema.ObjectId,title:String}]
@@ -116,8 +124,8 @@ NoteSchema.statics = {
    * @param {number} limit - Limit number of notes to be returned.
    * @returns {Promise<Note[]>}
    */
-  list({ skip = 0, limit = 50 } = {}) {
-    return this.find()
+  list({ skip = 0, limit = 50, user = null } = {}) {
+    return this.find({user:user})
       .sort({ createdAt: -1 })
       .skip(+skip)
       .limit(+limit)

@@ -34,6 +34,7 @@ router.route('/:id')
 router.param('id', noteCtrl.load);
 
 router.get('/s/:key',noteCtrl.search_regex);
+router.get('/t/:tag',noteCtrl.getBytag);
 
 
 export default router;

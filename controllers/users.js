@@ -30,15 +30,15 @@ export const signup = async (req, res) => {
         // Look for email coincidence
         const emailUser = await User.findOne({ email: email });
         if (emailUser) {
-        req.flash("error_msg", "The Email is already in use.");
-        res.redirect("/users/signup");
+            req.flash("error_msg", "The Email is already in use.");
+            res.redirect("/users/signup");
         } else {
         // Saving a New User
-        const newUser = new User({ email, password });
-        newUser.password = await newUser.encryptPassword(password);
-        await newUser.save();
-        req.flash("success_msg", "You are registered.");
-        res.redirect("/users/signin");
+            const newUser = new User({ email, password });
+            newUser.password = await newUser.encryptPassword(password);
+            await newUser.save();
+            req.flash("success_msg", "You are registered.");
+            res.redirect("/users/signin");
         }
     }
 };

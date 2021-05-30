@@ -28,30 +28,28 @@ NoteCtrl.get = function (req, res) {
 
 /**
  * Get note list.
- * @property {number} req.query.skip - Number of notes to be skipped.
- * @property {number} req.query.limit - Limit number of notes to be returned.
- * @returns {Note[]}
  */
 NoteCtrl.list = function list(req, res, next) {
-    const { limit = 50, skip = 0 } = req.query;
-    Note.list({ limit, skip })
+    const { limit = 50, skip = 0,user = req.user.id } = req.query;
+    Note.list({ limit, skip, user})
       .then(notes => res.json(notes))
       .catch(e => next(e));
   }
 
-NoteCtrl.search_fulltext = function search(req, res){
+NoteCtrl.search_fulltext = function search_fulltext(req, res){
   let key = req.params.key;
   //res.send(key);
 
   Note.find({
     $text: { $search: key },
+    user: req.user.id
   })
     .then(notes => console.log(notes.length))
     .catch(e => console.error(e));
 }
 
 // TODO: where user == req.user.id
-NoteCtrl.search_regex = function search(req, res){
+NoteCtrl.search_regex = function search_regex(req, res){
   let key = req.params.key;
   //res.send(key);
 
@@ -59,18 +57,25 @@ NoteCtrl.search_regex = function search(req, res){
     $or:[
       {"content":{ $regex: key, $options: 'i' }},
       {"title":{ $regex: key, $options: 'i' }}
-      ]
+      ],
+    user: req.user.id
     }
 )
     .then(notes => res.json(notes))
     .catch(e => console.error(e));
 }
 
+NoteCtrl.getBytag = function (req, res){
+  let tag = req.params.tag;
+  //console.log(tag);
+
+  Note.find({"tags.id": tag ,user: req.user.id})
+    .then(notes => res.json(notes))
+    .catch(e => console.error(e));
+}
+
 /**
  * Create new note
- * @property {string} req.body.notename - The notename of note.
- * @property {string} req.body.mobileNumber - The mobileNumber of note.
- * @returns {Note}
  */
 NoteCtrl.create = function create(req, res, next) {
   if (!req.user) {return res.send('not login!!');}
@@ -89,21 +94,17 @@ NoteCtrl.create = function create(req, res, next) {
 
 /**
  * Update existing note
- * @property {string} req.body.notename - The notename of note.
- * @property {string} req.body.mobileNumber - The mobileNumber of note.
- * @returns {Note}
  */
 NoteCtrl.update = function update(req, res, next) {
   const note = req.note;
   note.title = req.body.title;
   note.content = req.body.content;
   note.createdAt = req.body.createdAt;
+  note.tags = req.body.tags;
 
   note.save()
     .then(result => res.json(result))
     .catch(err => res.json({result:err.message}));
-    // .then(savedNote => res.json(savedNote))
-    // .catch(e => next(e));
 
 }
 
