@@ -12,8 +12,8 @@ block content
                             #logo.col: a= title
                             #user.col: a(href="/users/logout") logout
                     #taglist
-                        .alltags
-                            i.material-icons.prefix(style="margin:25px") local_offer 全部
+                        .alltags(onclick="resetTagList()")
+                            i.material-icons.prefix(style="margin:25px" ) local_offer 全部
                         ul#taglist_ul.ul-tags
                 section#notes-pan.col.s2.m4.l3
                     header

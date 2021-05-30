@@ -30,25 +30,26 @@ NoteCtrl.get = function (req, res) {
  * Get note list.
  */
 NoteCtrl.list = function list(req, res, next) {
-    const { limit = 50, skip = 0 } = req.query;
-    Note.list({ limit, skip })
+    const { limit = 50, skip = 0,user = req.user.id } = req.query;
+    Note.list({ limit, skip, user})
       .then(notes => res.json(notes))
       .catch(e => next(e));
   }
 
-NoteCtrl.search_fulltext = function search(req, res){
+NoteCtrl.search_fulltext = function search_fulltext(req, res){
   let key = req.params.key;
   //res.send(key);
 
   Note.find({
     $text: { $search: key },
+    user: req.user.id
   })
     .then(notes => console.log(notes.length))
     .catch(e => console.error(e));
 }
 
 // TODO: where user == req.user.id
-NoteCtrl.search_regex = function search(req, res){
+NoteCtrl.search_regex = function search_regex(req, res){
   let key = req.params.key;
   //res.send(key);
 
@@ -56,9 +57,19 @@ NoteCtrl.search_regex = function search(req, res){
     $or:[
       {"content":{ $regex: key, $options: 'i' }},
       {"title":{ $regex: key, $options: 'i' }}
-      ]
+      ],
+    user: req.user.id
     }
 )
+    .then(notes => res.json(notes))
+    .catch(e => console.error(e));
+}
+
+NoteCtrl.getBytag = function (req, res){
+  let tag = req.params.tag;
+  //console.log(tag);
+
+  Note.find({"tags.id": tag ,user: req.user.id})
     .then(notes => res.json(notes))
     .catch(e => console.error(e));
 }

@@ -124,8 +124,8 @@ NoteSchema.statics = {
    * @param {number} limit - Limit number of notes to be returned.
    * @returns {Promise<Note[]>}
    */
-  list({ skip = 0, limit = 50 } = {}) {
-    return this.find()
+  list({ skip = 0, limit = 50, user = null } = {}) {
+    return this.find({user:user})
       .sort({ createdAt: -1 })
       .skip(+skip)
       .limit(+limit)

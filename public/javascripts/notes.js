@@ -19,15 +19,16 @@ function tagslist_init(){
         TagItemOnClick(e);
     });
 
-    getTags(100);    
+    getTags();    
 
 }
 
-async function getTags(n){
+async function getTags(){
     let response = await fetch('api/tags/');
     let result = await response.json();
     //alert(result.length);
     buildTheTaglistByTemplate(result);
+    return;
 
 }
 
@@ -38,10 +39,9 @@ function TagItemOnClick(e){
     removeTagActive();
     $clickedTag = e.target;
 
+    // 找到可以改变active样式的父节点
     while(!$clickedTag.classList.contains("tag-item"))
         $clickedTag = $clickedTag.parentNode;
-
-    //alert($clickedTag.id);
     $clickedTag.classList.add("active");
 
     // 2 
@@ -49,14 +49,30 @@ function TagItemOnClick(e){
 }
 
 function removeTagActive(){
-    if($clickedTag)
-    $clickedTag.classList.remove("active");
+    // if($clickedTag){
+    //     $clickedTag.classList.remove("active");
+    // } else{
+    let nl = $taglist_container.querySelectorAll('.tag-item');
+    for(var i = 0; i < nl.length;i++){
+        if(nl[i].classList.contains("active"))
+            nl[i].classList.remove("active");
+    }        
+    // }
 };
 
+function resetTagList(){
+    removeTagActive();
+    rebuildTheNotelist();
+
+}
+
+let $taglist_container;
+let tag_chips = {}; // 用来填充 tag chip控件 autocompelete list 
+
 function buildTheTaglistByTemplate(tagjson){
-    //console.log(tagjson.length);
-    var $taglist_container = document.querySelector(".ul-tags");
-    var listfragment = document.createDocumentFragment();
+    //console.log("buildTheTaglistByTemplate ");
+    $taglist_container = document.querySelector(".ul-tags");
+    let listfragment = document.createDocumentFragment();
     let template = document.querySelector("#taglist_item_tp");
     //1 clear list first
     while ($taglist_container.firstChild) $taglist_container.removeChild($taglist_container.firstChild);
@@ -71,9 +87,22 @@ function buildTheTaglistByTemplate(tagjson){
 
 
         listfragment.appendChild(item);
+
+        //let tag = {tag:tagjson[i].name,image:null};
+        tag_chips[tagjson[i].name] = null;
+        //tag_chips.push(tag);
+
     }
     $taglist_container.appendChild(listfragment);
     
+}
+
+async function getNoteByTag(tag){
+    let response = await fetch('api/notes/t/'+tag); 
+    let result = await response.json();
+    
+    buildTheNotelistByTemplate(result);
+
 }
 ///# notelist//////////////========================================================================================
 
@@ -111,7 +140,7 @@ function notelist_init(){
     })
     
     // init
-    getNotes(100);    
+    getNotes();    
 
 }
 
@@ -155,15 +184,8 @@ async function addNew(e){
     activenote = await response.json();
 
     syncNotewithUI();
-
-    // editor.setValue(activenote.content);
-    // let $notetitle = document.querySelector("#topic");
-    // $notetitle.focus();
-    // $notetitle.value = activenote.title;
-
     // add a note ui item on the top of notelist
     buildSingleNOteByTemplate(activenote);
-
 
 }
 
@@ -171,20 +193,42 @@ async function addNew(e){
 // 1 title content的编辑修改
 // 2 tags 修改
 function syncNotewithUI(){
+    //console.log("syncNotewithUI");
+    //1 editor
     editor.setValue(activenote.content);
 
+    //2 topic input
     let $notetitle = document.querySelector("#topic");
     $notetitle.value = activenote.title;
 
-    // tag chips
+    //3 tag chips
     let chips = [];
     activenote.tags.forEach(tag =>{
         chips.push({tag:tag.name})
     })
-    tagChip(chips,[]);
+    tagChip(chips,tag_chips);
+
+    //4 tag list
+    syncTaglist(chips);
 
     $notetitle.focus();
     
+}
+
+function syncTaglist(chips){
+    //console.log("syncTaglist");
+    let nl = $taglist_container.querySelectorAll('.tag-item');
+    //alert(nl.length);
+    for(var i = 0; i < nl.length;i++){
+        //clear first
+        nl[i].classList.remove("active");
+        let tag = nl[i].querySelector('.tag').innerHTML;
+        //alert(tag);
+        chips.forEach(chip =>{
+            if(chip.tag == tag)
+                nl[i].classList.add("active");
+        })
+    }
 }
 
 async function search(key){
@@ -192,32 +236,20 @@ async function search(key){
     let result = await response.json();
 
     buildTheNotelistByTemplate(result);
-
 }
 
 async function getOneNote(id){
     let response = await fetch('api/notes/'+ id);
     activenote = await response.json();
+    let result = !!activenote;
     
-
-    syncNotewithUI();
-    //editor.setValue(activenote.content);
-
-    // let $notetitle = document.querySelector("#topic");
-    // $notetitle.value = activenote.title;
-
-    // // tag chips
-    // let chips = [];
-    // activenote.tags.forEach(tag =>{
-    //     chips.push({tag:tag.name})
-    // })
-    // tagChip(chips,[]);
-
-    // $notetitle.focus();
+    if(result){
+        syncNotewithUI();
+    }
+    return result;
 }
 
-// TODO supply userid 
-async function getNotes(n){
+async function getNotes(){
     let response = await fetch('api/notes/');
     let result = await response.json();
     
@@ -286,6 +318,9 @@ function buildTheNotelistByTemplate(notejson){
 
     //2 build the new list
     for (var i = 0; i < notejson.length; i++) {
+        // set the lastest note as activenote on every notelist ui rebuild
+        if(i == 0) activenote = notejson[i];
+
         const item = template.content.cloneNode(true);
         item.querySelector('.note-item').setAttribute('id',notejson[i]._id);
         item.querySelector('.note_title').innerHTML = notejson[i].title;
@@ -304,6 +339,7 @@ function buildTheNotelistByTemplate(notejson){
 ///# note//////////////
 let editor, savenote_btn_el;
 savenote_btn_el = "#savenote";
+let tags;
 
 function tagChip(tagsdata,autocompleteOptions){
     $('.chips-autocomplete').chips({
@@ -316,7 +352,7 @@ function tagChip(tagsdata,autocompleteOptions){
             minLength: 1
         },
         onChipAdd:async function(e){
-            //console.log(e);
+
             const c = M.Chips.getInstance($('.chips-autocomplete'));
             const cd =c.chipsData;
             const end = cd[cd.length-1];
@@ -335,15 +371,7 @@ function tagChip(tagsdata,autocompleteOptions){
             //2 update note doc on success
     
             activenote.tags.push({id:newtag.id,name:newtag.name});
-            //alert(activenote.tags.length);
-    
-            // $notetitle = document.querySelector("#topic");
-            // let note = {
-            //     title: $notetitle.value,
-            //     content: editor.getValue(),
-            //     createdAt: Date.now(),
-            //     tags:activenote.tags
-            //   };
+
             activenote.createdAt = Date.now();
               
               let response = await fetch('/api/notes/'+activenote.id, {
@@ -357,6 +385,10 @@ function tagChip(tagsdata,autocompleteOptions){
               let result = await response.json();
               
               //3 update tag list ui
+              // 重新获取taglist 数据
+              await getTags(); // getTags 是异步的async函数，调用时必须await，不然逻辑会乱，后面的代码会先执行
+              // 
+              syncNotewithUI();
         },
         onChipDelete: async (event, chip) => {
 
@@ -377,13 +409,6 @@ function tagChip(tagsdata,autocompleteOptions){
                 return tag.name != deleltetag;
             });
 
-            // $notetitle = document.querySelector("#topic");
-            // let note = {
-            //     title: $notetitle.value,
-            //     content: editor.getValue(),
-            //     createdAt: Date.now(),
-            //     tags:newtags
-            //   };
             activenote.createdAt = Date.now();
             activenote.tags = newtags;
               
@@ -397,7 +422,11 @@ function tagChip(tagsdata,autocompleteOptions){
               
               result = await response.json();
 
-              //3 update tag list (result);
+              //3 update tag list ui
+              // 重新获取tag 数据
+              await getTags(); // getTags 是异步的async函数，调用时必须await，不然逻辑会乱，后面的代码会先执行
+              // 
+              syncNotewithUI();
         
         }
         });
@@ -426,8 +455,7 @@ function note_init(){
     });
 
     // init tag chips UI
-    tagChip([],[]);
-    
+    tagChip([],tag_chips);
 
     //////save note button
     let savenote_btn_v = document.querySelector(savenote_btn_el);
@@ -443,13 +471,17 @@ function note_init(){
 
 }
 
+// setting up the lastest note or new note(for new user)
+function setupTheEditingNote(){
+    if(activenote){
+        syncNotewithUI();
+    }else{
+        addNew();
+    }
+
+}
+
 async function saveNote(e){
-    // $notetitle = document.querySelector("#topic");
-    // let note = {
-    //     title: $notetitle.value,
-    //     content: editor.getValue(),
-    //     createdAt: Date.now()
-    //   };
       
       let response = await fetch('/api/notes/'+activenote.id, {
         method: 'PUT',
@@ -463,20 +495,16 @@ async function saveNote(e){
       updateSingleNOteByTemplate(result);
       alert('ok');
 
-
 }
 
 $(function(){ 
     notelist_init();
     tagslist_init();
+    // note pan有控件依赖服务器数据，所以初始化顺序不能随意
     note_init();
-    // const myInputElements = myForm.querySelectorAll('input')
 
-    // Array.from(myInputElements).forEach(el => {
-    // el.addEventListener('change', function (event) {
-    //     console.log(event.target.value)
-    // })
-    // })
+    // TODO： notelist tagslist都是异步（因为依赖服务数据），以下功能函数是个不完善实现，最好在两个list完成异步后再执行（现在是同步的），有待使用自定义事件改进
+    setupTheEditingNote();
 }); 
 
 
