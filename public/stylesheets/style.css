@@ -2,9 +2,19 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+.goodlooking{
+  font-family:'SiYuan-ExtraLig286822aae81ef83';
+}
+
 a {
   color: #00B7FF;
 }
+
+.fullscreen {
+  width: 100%;
+  height: 100vh;
+}
+
 .window{
   display:flex;
   flex-direction:column;
@@ -12,7 +22,7 @@ a {
   overflow: hidden;
 }
 .topbar{
-  background:hsl(162, 76%, 38%);
+  background:#fff;
   padding: 5px;
 }
 .linknote{
@@ -186,3 +196,7 @@ section#simditor{
 #searching.input-field .prefix.active {
     color: #ffffff;
   }
+
+input#search::placeholder {
+    color: #fff;
+}

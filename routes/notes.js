@@ -6,7 +6,7 @@ let router = express.Router();
 
 /* GET note listing. */
 // router.get('/', ensuerLogins.ensureLoggedIn('/users/signin'), function(req, res) {
-  router.get('/', function(req, res) { 
+  router.get('/', ensuerLogins.ensureLoggedIn('/users/signin'),function(req, res) { 
     let notes;
     // Note.list()
     // .then(notes => {
