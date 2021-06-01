@@ -1,7 +1,15 @@
 extends layout
 
 block content
-  h1= title
-  a(href="/notes") 
-    img(src="/images/pencil.png", alt="linknote")
-  p Welcome to #{title}
+  #content.main
+    .fullscreen.valign-wrapper
+      .valign.center-align(style="width: 100%;")
+        .center
+          a(href='/notes')
+            img#personality.centered-and-cropped(src="/images/pencil.png", alt="linknote", style="width: 350px")
+        h3.goodlooking.center.teal-text.m-20.text-lighten-2 联想笔记
+        .center.goodlooking
+          p.logosub(style="font-size: 18pt;color: darkgray;")
+            span.teal-text.m-20.text-lighten-2 Linknote | 
+            span 一支帮助你学习和创作的笔记工具
+

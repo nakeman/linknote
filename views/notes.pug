@@ -7,11 +7,16 @@ block content
         main.linknote
             .row
                 aside#tags-pan.col.s0.m2.l2
-                    header.topbar
+                    header.topbar(style="text-align:center;position:relative;")
                         .row
-                            #logo.col: a= title
-                            #user.col: a(href="/users/logout") logout
-                    #taglist
+                            div(style="margin:auto;")
+                                #logo
+                                    a(href='/')
+                                        img(src="/images/pencil.png", alt="linknote", style="width: 200px")
+                                        h5.goodlooking.center.teal-text.m-20.text-lighten-2 联想笔记 | Linknote
+                                #user(style="position:absolute;top:5px;right:5px;"): a(href="/users/logout" alt="logout")
+                                    i.material-icons.prefix user logout
+                    #taglist.goodlooking
                         .alltags(onclick="resetTagList()")
                             i.material-icons.prefix(style="margin:25px" ) local_offer 全部
                         ul#taglist_ul.ul-tags
@@ -20,7 +25,7 @@ block content
                         section
                             #searching.input-field
                                 i.material-icons.prefix search
-                                input#search.form-control(type='text', name='key' placeholder='searching...' style='color:white' autofocus=true)
+                                input#search.form-control(type='text', name='key' placeholder='searching...' style='color:white;border-bottom:1px solid #fff' autofocus=true)
                         a#newnote.btn-floating.btn-large.waves-effect.waves-light.red(style='position: absolute;right: 15px;')
                             i.material-icons add
                     #notelist   
@@ -57,6 +62,7 @@ block content
             .count
                 .notecount 25
 block script
+    script(src='/javascripts/tata.js')
     script(src='/javascripts/editor/module.js')
     script(src='/javascripts/editor/hotkeys.js')
     script(src='/javascripts/editor/simditor.js')

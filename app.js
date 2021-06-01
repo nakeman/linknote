@@ -10,7 +10,7 @@ import './database.js'; // 何时何处创建：异步链接，似乎程序初�
 import {init_passport,init_session} from "./UserAuthentication.js"
 
 import indexRouter from './routes/index.js';
-import usersRouter from './routes/users.js';
+import usersRouter from './users/router.js';
 import notesRouter from './routes/notes.js';
 import notesAPIRouter from './notes/router.js';
 import tagsAPIRouter from './tags/router.js';

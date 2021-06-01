@@ -162,8 +162,12 @@ function NoteItemOnClick(e){
 }
 
 function removeActive(){
-    if($clickedEle)
-        $clickedEle.classList.remove("active");
+    $notelist_container = document.querySelector(".ul-notes");
+    let nl = $notelist_container.querySelectorAll('.note-item');
+    for(var i = 0; i < nl.length;i++){
+        if(nl[i].classList.contains("active"))
+            nl[i].classList.remove("active");
+    }   
 }
 
 async function addNew(e){
@@ -210,6 +214,14 @@ function syncNotewithUI(){
 
     //4 tag list
     syncTaglist(chips);
+
+    //5 note list
+    let $notelist_container = document.querySelector("#notelist");
+    let nl = $notelist_container.querySelectorAll(".note-item");
+    for(var i = 0; i < nl.length;i++){
+        if(nl[i].getAttribute("id") == activenote.id)
+            nl[i].classList.add("active");
+    }
 
     $notetitle.focus();
     
@@ -493,7 +505,7 @@ async function saveNote(e){
       
       let result = await response.json();
       updateSingleNOteByTemplate(result);
-      alert('ok');
+      tata.success("ok","保存成功。",{position:"tm"});
 
 }
 
@@ -504,7 +516,10 @@ $(function(){
     note_init();
 
     // TODO： notelist tagslist都是异步（因为依赖服务数据），以下功能函数是个不完善实现，最好在两个list完成异步后再执行（现在是同步的），有待使用自定义事件改进
-    setupTheEditingNote();
+    setTimeout(() => {
+        setupTheEditingNote();
+    }, 1000);
+    
 }); 
 
 
