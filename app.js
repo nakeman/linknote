@@ -10,8 +10,10 @@ import './database.js'; // 何时何处创建：异步链接，似乎程序初�
 import {init_passport,init_session} from "./UserAuthentication.js"
 
 import indexRouter from './routes/index.js';
-import usersRouter from './routes/users.js';
+import usersRouter from './users/router.js';
 import notesRouter from './routes/notes.js';
+import notesAPIRouter from './notes/router.js';
+import tagsAPIRouter from './tags/router.js';
 
 import { dirname, filename } from 'dirname-filename-esm';
 
@@ -25,7 +27,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
-//app.use(express.json());
+app.use(express.json());
 //app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: false }))
 
@@ -54,6 +56,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/notes', notesRouter);
+app.use('/api/notes',notesAPIRouter);
+app.use('/api/tags',tagsAPIRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

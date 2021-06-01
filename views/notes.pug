@@ -1,6 +1,72 @@
 extends layout
+block style
+    link(rel='stylesheet' type='text/css' href='/stylesheets/simditor.css')
 
 block content
-    h1= title
-    p this a note list page!
-    a(href="/users/logout") logout
+    .window
+        main.linknote
+            .row
+                aside#tags-pan.col.s0.m2.l2
+                    header.topbar(style="text-align:center;position:relative;")
+                        .row
+                            div(style="margin:auto;")
+                                #logo
+                                    a(href='/')
+                                        img(src="/images/pencil.png", alt="linknote", style="width: 200px")
+                                        h5.goodlooking.center.teal-text.m-20.text-lighten-2 联想笔记 | Linknote
+                                #user(style="position:absolute;top:5px;right:5px;"): a(href="/users/logout" alt="logout")
+                                    i.material-icons.prefix user logout
+                    #taglist.goodlooking
+                        .alltags(onclick="resetTagList()")
+                            i.material-icons.prefix(style="margin:25px" ) local_offer 全部
+                        ul#taglist_ul.ul-tags
+                section#notes-pan.col.s2.m4.l3
+                    header
+                        section
+                            #searching.input-field
+                                i.material-icons.prefix search
+                                input#search.form-control(type='text', name='key' placeholder='searching...' style='color:white;border-bottom:1px solid #fff' autofocus=true)
+                        a#newnote.btn-floating.btn-large.waves-effect.waves-light.red(style='position: absolute;right: 15px;')
+                            i.material-icons add
+                    #notelist   
+                        ul#notelist_ul.ul-notes
+                            //- each note in notes
+                            //-     li.ul-note(id=note.id): a.waves-effect.waves-teal.btn-flat #{ note.title}
+                            //-         .note_CreatedAt(style="float:right") #{note.createdAt}
+                section#note-pan.col.s10.m6.l7
+                    header
+                        .input-field
+                            i.material-icons.prefix create
+                            input#topic(type='text' name='topic' style='font-size: xx-large;')
+                            label(for='topic') Note Topic
+                    section(style='display: flex;')
+                        i(style='font-size:xx-large').material-icons.prefix local_offer
+                        div(style='margin:auto').chips.chips-autocomplete
+                    section#simditor
+                        textarea#editor(placeholder='Balabala' autofocus)
+                        a#savenote.btn-floating.btn-large.waves-effect.waves-light.write(style='position: absolute;top: 20px;right: 15px;')
+                            i.material-icons save
+    template#notelist_item_tp
+        .note-item
+            .desc
+                .note_title Lorem Ipsum
+                .note_desc Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit
+            .time
+                .note_createdAt Jun 1, 2012
+                div.day 1 day
+    template#taglist_item_tp
+        .tag-item
+            i.material-icons.prefix local_offer
+            .desc
+                .tag Lorem
+            .count
+                .notecount 25
+block script
+    script(src='/javascripts/tata.js')
+    script(src='/javascripts/editor/module.js')
+    script(src='/javascripts/editor/hotkeys.js')
+    script(src='/javascripts/editor/simditor.js')
+    script(src='/javascripts/notes.js')
+
+
+      

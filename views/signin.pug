@@ -1,16 +1,24 @@
 extends layout
 
 block content
-    h1 sign in
-
-    form(action='/users/signin' method='post')
-        .form-group
-            label(for='email') Email
-            input.form-control(type='email', name='email' placeholder='Email' autofocus=true)
-        .form-group
-            label(for='password') Password
-            input.form-control(type='password', name='password')
-        button.btn.btn-primary(type='submit') Sign-in
-    p not sign? pls 
-        a(href="/users/signup") signup
+  #content.main
+    .fullscreen.valign-wrapper
+      .valign.center-align(style="width: 100%;")
+        .center(style="width:30%;margin:auto;")
+            a(href='/')
+                img#personality.centered-and-cropped(src="/images/pencil.png", alt="linknote", style="width: 250px")
+            h3.goodlooking 登录 ｜ Sign In
+            .form()
+                .form-group
+                    label(for='email') Email
+                    input#email.form-control(type='email', name='email' placeholder='Email' autofocus=true)
+                .form-group
+                    label(for='password') Password
+                    input#password.form-control(type='password', name='password')
+                button.btn.btn-primary(onclick="SignIn()" style="width: 100%;")  Sign-In
+            p not sign? pls 
+                a(href="/users/signup") signup
+block script
+    script(src='/javascripts/tata.js')
+    script(src='/javascripts/user.js')
         
