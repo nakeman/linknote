@@ -4,20 +4,23 @@ block content
   #content.main
     .fullscreen.valign-wrapper
       .valign.center-align(style="width: 100%;")
-        .center(style="width:30%;margin:auto;")
-            a(href='/')
-                img#personality.centered-and-cropped(src="/images/pencil.png", alt="linknote", style="width: 250px")
-            h3.goodlooking 注册 ｜ Sign Up
-            .form()
-                .form-group
-                    label(for='email') Email
-                    input#email.form-control(type='email', name='email' placeholder='Email')
-                .form-group
-                    label(for='password') Password
-                    input#password.form-control(type='password', name='password')
-                button.btn.btn-primary(onclick="SignUp()" style="width: 100%;") Sign-Up
-            p already have a pencil? pls 
-                a(href="/users/signin") signin
+        .row
+            .col.l4.m4.s0
+            .col.l4.m4.s12
+                a(href='/')
+                    img#personality.centered-and-cropped(src="/images/pencil.png", alt="linknote", style="width: 250px")
+                h3.goodlooking 注册 ｜ Sign Up
+                .form()
+                    .form-group
+                        label(for='email') Email
+                        input#email.form-control(type='email', name='email' placeholder='Email')
+                    .form-group
+                        label(for='password') Password
+                        input#password.form-control(type='password', name='password')
+                    button.btn.btn-primary(onclick="SignUp()" style="width: 100%;") Sign-Up
+                p already have a pencil? pls 
+                    a(href="/users/signin") signin
+            .col.l4.m4.s0
 block script
     script(src='/javascripts/tata.js')
     script(src='/javascripts/user.js')

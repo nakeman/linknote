@@ -4,12 +4,16 @@ block content
   #content.main
     .fullscreen.valign-wrapper
       .valign.center-align(style="width: 100%;")
-        .center
-          a(href='/notes')
-            img#personality.centered-and-cropped(src="/images/pencil.png", alt="linknote", style="width: 350px")
-        h3.goodlooking.center.teal-text.m-20.text-lighten-2 联想笔记
-        .center.goodlooking
-          p.logosub(style="font-size: 18pt;color: darkgray;")
-            span.teal-text.m-20.text-lighten-2 Linknote | 
-            span 一支帮助你学习和创作的笔记工具
+        .row
+          .col.l4.m4.s0
+          .col.l4.m4.s12
+            .center
+              a(href='/notes')
+                img#linknote-logo.centered-and-cropped(src="/images/pencil.png", alt="linknote")
+            h3.goodlooking.center.teal-text.m-20.text-lighten-2 联想笔记
+            .center.goodlooking
+              p.logosub(style="color: darkgray;")
+                span.teal-text.m-20.text-lighten-2 Linknote | 
+                span 一支帮助你学习和创作的笔记工具
+          .col.l4.m4.s0
 

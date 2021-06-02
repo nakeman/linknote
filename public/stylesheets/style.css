@@ -5,6 +5,14 @@ body {
 .goodlooking{
   font-family:'SiYuan-ExtraLig286822aae81ef83';
 }
+#linknote-logo{
+  width: 350px;
+
+}
+.goodlooking .logosub{
+  font-size: 18pt;
+
+}
 
 a {
   color: #00B7FF;
@@ -199,4 +207,33 @@ section#simditor{
 
 input#search::placeholder {
     color: #fff;
+}
+
+/* 缩放界面 */
+@media only screen and (max-width: 600px) {
+  #linknote-logo{
+    width: 55%;
+    /* height: 75%; */
+
+  }
+aside#tags-pan{
+  display: none;
+  }
+
+
+h2{font-size: 2.2rem;}
+h3{font-size: 1.8rem;}
+body{font-size: 1.2rem;}
+
+
+.goodlooking{
+  font-size: 1.8rem;
+
+}
+
+.goodlooking .logosub{
+  font-size: 1.3rem;
+}
+
+
 }
